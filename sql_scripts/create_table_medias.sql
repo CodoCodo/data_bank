@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS medias (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  location VARCHAR(128) NOT NULL,
+  checksum VARCHAR(32) NOT NULL,
+  modify_date BIGINT NOT NULL,
+  width INT NOT NULL,
+  height INT NOT NULL,
+  channels INT NOT NULL,
+  frame_cnt INT NOT NULL
+);
+
