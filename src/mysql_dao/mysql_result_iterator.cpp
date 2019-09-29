@@ -56,3 +56,11 @@ MYSQL_ROW MysqlResultIterator::Next() {
 int MysqlResultIterator::GetCols() {
   return (p_res_ != nullptr) ? p_res_->field_count : 0;
 }
+
+int MysqlResultIterator::GetRows() {
+  return rows_;
+}
+
+int MysqlResultIterator::GetCurrentRowIndex() {
+  return next_row_index_ - 1;
+}

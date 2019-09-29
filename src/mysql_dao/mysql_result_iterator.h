@@ -8,7 +8,6 @@ class MysqlResultIterator {
   int rows_;
   MYSQL_RES *p_res_;
   
-  void Free();
  public:
   MysqlResultIterator(MYSQL_RES *p_res);
   ~MysqlResultIterator();
@@ -20,6 +19,9 @@ class MysqlResultIterator {
   bool HasNext();
   MYSQL_ROW Next();
   int GetCols();
+  int GetRows();
+  int GetCurrentRowIndex();
+  void Free();
 };
 
 #endif //_MYSQL_RESULT_ITERATOR_H
