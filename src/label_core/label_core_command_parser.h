@@ -5,12 +5,12 @@
 #include <string>
 #include "label_core_command.h"
 #include "util/queue_ts.hpp"
+#include "command/label_core_command_factory.h"
 
-class LabelCoreCommandParser{
+class LabelCoreCommandParser {
   QueueTs< std::shared_ptr<LabelCoreCommand> > cmd_queue_;
+  LabelCoreCommandFactory command_factory_;
  public:
-  // LabelCoreCommandParser();
-  
   std::shared_ptr<LabelCoreCommand> ExtractCommand();
   
   void PushCommandStr(const std::string & cmd_str, char * p_addition_buf = nullptr);
