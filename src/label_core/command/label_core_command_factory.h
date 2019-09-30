@@ -1,7 +1,6 @@
 #ifndef _LABEL_CORE_COMMAND_FACTORY_H
 #define _LABEL_CORE_COMMAND_FACTORY_H
 
-#include "label_core_command.h"
 #include <map>
 #include <string>
 #include <memory>

@@ -1,3 +1,4 @@
+#include "label_core_command.h"
 #include "label_core_command_factory.h"
 #include <algorithm>
 #include "null_cmd.hpp"
@@ -8,10 +9,10 @@ LabelCoreCommandFactory::LabelCoreCommandFactory() {
   auto AddProto = [&](LabelCoreCommand * p_command) {
     std::shared_ptr<LabelCoreCommand> p(p_command);
     protos_.insert(std::make_pair(p->Key(), p));
-  }
+  };
   // 初始化原型存储表
   AddProto(new NullCmd());
-  AddProto(new NextCmd());
+  AddProto(new ExitCmd());
   AddProto(new InitCmd());
 }
 
