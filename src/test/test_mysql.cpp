@@ -1,9 +1,18 @@
+
+extern int TestMediaAccess(int argc, char *argv[]);
+int main(int argc, char * argv[]) {
+  return TestMediaAccess(argc, argv);
+}
+
+#if 0
 #include "mysql_dao/mysql_dao.h"
 #include <iostream>
 
 int main(int argc, char *argv[]) {
   MysqlDao mysql_dao("localhost", "root", "codocodo", "media_bank");
+  MysqlDao mysql_dao1("localhost", "root", "codocodo", "media_bank");
   auto iter = mysql_dao.DoQuery("select * from medias");
+  auto iter1 = mysql_dao1.DoQuery("select * from medias");
   int cols = iter.GetCols();
   while (iter.HasNext()) {
     auto row = iter.Next();
@@ -11,9 +20,14 @@ int main(int argc, char *argv[]) {
       std::cout << row[c] << '\t';
     }
     std::cout << std::endl;
+
+    auto row1 = iter1.Next();
+    std::cout << row1[0] << std::endl;
   }
+  
   return 0;
 }
+#endif 
 
 #if 0
 // mysql 的简单查询测试
