@@ -4,6 +4,8 @@
 #include "null_cmd.hpp"
 #include "init_cmd.hpp"
 #include "exit_cmd.hpp"
+#include "set_cmd.hpp"
+#include "show_cmd.hpp"
 
 LabelCoreCommandFactory::LabelCoreCommandFactory() {
   auto AddProto = [&](LabelCoreCommand * p_command) {
@@ -14,6 +16,8 @@ LabelCoreCommandFactory::LabelCoreCommandFactory() {
   AddProto(new NullCmd());
   AddProto(new ExitCmd());
   AddProto(new InitCmd());
+  AddProto(new SetCmd());
+  AddProto(new ShowCmd());
 }
 
 std::string LabelCoreCommandFactory::GetKeyFromCommandStr(const std::string & cmd_str) {

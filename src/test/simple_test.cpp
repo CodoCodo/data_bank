@@ -1,3 +1,6 @@
+#if 0
+// Test ImageProvider and MediaAccess
+
 #include "media_access/media_access.h"
 #include "image_provider/image_provider.h"
 
@@ -22,7 +25,47 @@ int TestImageProvider(int argc, char *argv[]) {
   }
   return 0;
 }
+#endif
+
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
+
+std::vector<std::string> TSplit(const std::string & str, char split_char = ' ') {
+  auto *p = str.c_str();
+  auto *p_end = str.c_str() + str.size();
+  const char *p_content_start = nullptr;
+
+  enum {
+    STATE_SPLIT_CHAR = 0,
+    STATE_NOT_SPLIT_CHAR,
+  };
+  
+  int state = STATE_SPLIT_CHAR;
+  for (; p != p_end; ++p) {
+    switch (state) {
+      case STATE_SPLIT_CHAR:
+        if (*p != split_char) {
+          p_content_start = p;
+          state = STATE_NOT_SPLIT_CHAR;
+        }
+        break;
+      case STATE_NOT_SPLIT_CHAR:
+        if (*p == split_char) {
+        }
+        break;
+      default:
+        break;
+    }
+    if (*p != split_char) {
+
+    }
+  }
+}
 
 int main(int argc, char *argv[]) {
-  return TestImageProvider(argc, argv);
+  std::string tmp_str("fuck");
+  std::cout << tmp_str.size() << std::endl;
+  return 0;
 }

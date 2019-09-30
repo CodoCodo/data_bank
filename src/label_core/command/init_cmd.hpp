@@ -14,6 +14,7 @@ class InitCmd : public LabelCoreCommand {
 
   virtual void Execute(std::shared_ptr<LabelCoreContext> p_context) override {
     // todo 
+    std::cout << "initing " << std::endl;
   }
 
   virtual std::shared_ptr<LabelCoreCommand> Clone(const std::string & cmd_str) override {

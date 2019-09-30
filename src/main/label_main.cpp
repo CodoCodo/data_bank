@@ -36,7 +36,7 @@ void OnMouse(int event, int x, int y, int flags, void *user_data) {
   p_queue->Push(MouseEvent(event, x, y));
 }
 
-int main(int argc, char *argv[]) {
+int LabelMain(int argc, char *argv[]) {
   const std::string process_name = "label";
   const int frame_interval = 40;
   std::shared_ptr<LabelCoreContext> p_context(new LabelCoreContext);
@@ -47,21 +47,33 @@ int main(int argc, char *argv[]) {
   cv::Mat output_img;
   cv::namedWindow(process_name);
   cv::setMouseCallback(process_name, OnMouse, &mouse_event_queue); //调用回调函数
-  while(1) {
+  while(p_context->b_run_) {
     cv::imshow(process_name, p_context->output_img_);
      
-    // 命令生成
+    // 按键事件
     auto key = cv::waitKey(frame_interval);
     std::cout << "tdj_debug " << (int)key << std::endl;
 
+    // 处理鼠标事件
     MouseEvent mouse_event;
-    if (mouse_event_queue.TryPop(mouse_event)) {
-      std::cout << "tdj_debug " << mouse_event << std::endl;
+    for (int mouse_event_count = mouse_event_queue.Size();
+         mouse_event_count > 0; --mouse_event_count) {
+        mouse_event_queue.TryPop(mouse_event);
     }
 
+    // 命令行直接输入
+    std::string cmd_line;
+    std::getline(std::cin, cmd_line);
+
     // 推送命令
+    p_command_parser->PushCommandStr(cmd_line);
+    p_core->RunOnce();
   }
 
   cv::destroyWindow(process_name);
   return 0;
+}
+
+int main(int argc, char *argv[]) {
+  return LabelMain(argc, argv);
 }
