@@ -14,6 +14,8 @@ class LabelCore {
             std::shared_ptr<LabelCoreCommandParser> p_command_parser);
             
   void Run();
+
+  void RunOnce();
 };
 
 #endif //_LABEL_CORE_H

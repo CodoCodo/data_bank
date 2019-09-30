@@ -12,3 +12,8 @@ void LabelCore::Run() {
     p_cmd->Execute(p_context_);
   }
 }
+
+void LabelCore::RunOnce() {
+  auto p_cmd = p_command_parser_->ExtractCommand();
+  p_cmd->Execute(p_context_);
+}
