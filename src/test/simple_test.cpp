@@ -27,6 +27,7 @@ int TestImageProvider(int argc, char *argv[]) {
 }
 #endif
 
+#if 0
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -36,5 +37,29 @@ int TestImageProvider(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
   auto result = TUtil::Split("set value 1111");
   auto result1 = TUtil::Split("how are - you ");
+  return 0;
+}
+#endif
+
+#include <string>
+#include <iostream>
+#include <sstream>
+#include "msgpack.hpp"
+
+void ShowCommand(const std::string & cmd_str) {
+  auto space_pos = cmd_str.find_first_of(' ');
+  auto key = cmd_str.substr(0, space_pos);
+  std::string value;
+  if (space_pos < cmd_str.size()) {
+    value = cmd_str.substr(space_pos + 1);
+  }
+  std::cout << key << std::endl;
+  std::cout << value << std::endl;
+}
+
+int main(int argc, char *argv[]) {
+  ShowCommand("set");
+  ShowCommand("set ");
+  ShowCommand("set 1");
   return 0;
 }
