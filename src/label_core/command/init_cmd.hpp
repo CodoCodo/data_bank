@@ -17,7 +17,7 @@ class InitCmd : public LabelCoreCommand {
     std::cout << "initing " << std::endl;
   }
 
-  virtual std::shared_ptr<LabelCoreCommand> Clone(const std::string & cmd_str) override {
+  virtual std::shared_ptr<LabelCoreCommand> Clone(const CommandObject & cmd_str) override {
     return std::make_shared<InitCmd>(*this);
   }
 };

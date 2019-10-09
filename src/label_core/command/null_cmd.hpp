@@ -11,7 +11,7 @@ class NullCmd : public LabelCoreCommand {
   virtual void Execute(std::shared_ptr<LabelCoreContext> p_context) {
   }
 
-  virtual std::shared_ptr<LabelCoreCommand> Clone(const std::string & cmd_str) {
+  virtual std::shared_ptr<LabelCoreCommand> Clone(const CommandObject & cmd_str) {
     return std::make_shared<NullCmd>(*this);
   }
 };

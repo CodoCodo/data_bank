@@ -8,18 +8,16 @@
 #include "label_core_command.h"
 
 class ShowCmd : public LabelCoreCommand {
-  std::string cmd_str_;
-  std::string key_;
+  CommandObject cmd_obj_;
   std::string var_name_;
    
-  void ParseCmd(const std::string & cmd_str) {
-    std::istringstream iss(cmd_str);
-    iss >> key_ >> var_name_;
+  void ParseCmd(const CommandObject & cmd_obj) {
+    TUtil::SplitKeyValue(cmd_obj.value, &var_name_);
   }
  public:
-  ShowCmd(const std::string & cmd_str = "")
-    : cmd_str_(cmd_str) {
-    ParseCmd(cmd_str);
+  ShowCmd(const CommandObject & cmd_obj = CommandObject())
+    : cmd_obj_(cmd_obj) {
+    ParseCmd(cmd_obj);
   }
 
   virtual std::string Key() override {
@@ -36,8 +34,8 @@ class ShowCmd : public LabelCoreCommand {
     }
   }
 
-  virtual std::shared_ptr<LabelCoreCommand> Clone(const std::string & cmd_str) override {
-    return std::make_shared<ShowCmd>(cmd_str);
+  virtual std::shared_ptr<LabelCoreCommand> Clone(const CommandObject & cmd_obj) override {
+    return std::make_shared<ShowCmd>(cmd_obj);
   }
 };
 #endif //_SHOW_CMD_HPP

@@ -11,7 +11,7 @@ class CommandObject {
   CommandObject(const std::string & _key = "", const std::string & _value = "");
 
   void Parse(const std::string & cmd_str);
-  bool Empty();
+  bool Empty() const;
 
   std::string key;
   std::string value;

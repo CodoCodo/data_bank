@@ -1,4 +1,5 @@
 #include "command_object.h"
+#include "util/t_util.h"
 
 std::ostream & operator<<(std::ostream & os, const CommandObject & obj) {
   os << obj.key << ' ' << obj.value;
@@ -11,13 +12,9 @@ CommandObject::CommandObject(const std::string & _key, const std::string & _valu
 }
 
 void CommandObject::Parse(const std::string & cmd_str) {
-  auto space_pos = cmd_str.find_first_of(' ');
-  key = cmd_str.substr(0, space_pos);
-  if (space_pos < cmd_str.size()) {
-    value = cmd_str.substr(space_pos + 1);
-  }
+  TUtil::SplitKeyValue(cmd_str, &key, &value);
 }
 
-bool CommandObject::Empty() {
+bool CommandObject::Empty() const {
   return key.empty();
 }

@@ -25,9 +25,9 @@ std::string LabelCoreCommandFactory::GetKeyFromCommandStr(const std::string & cm
   return cmd_str.substr(0, pos);
 }
 
-std::shared_ptr<LabelCoreCommand> LabelCoreCommandFactory::Create(const std::string & cmd_str) {
+std::shared_ptr<LabelCoreCommand> LabelCoreCommandFactory::Create(const CommandObject & command_obj) {
   // 从str获取命令关键字
-  auto key = GetKeyFromCommandStr(cmd_str);
+  auto & key = command_obj.key;
   auto iter = protos_.find(key);
   std::shared_ptr<LabelCoreCommand> p_command_proto;
   if (iter != protos_.end()) {
@@ -35,5 +35,5 @@ std::shared_ptr<LabelCoreCommand> LabelCoreCommandFactory::Create(const std::str
   } else {
     p_command_proto = protos_["null"];
   }
-  return p_command_proto->Clone(cmd_str);
+  return p_command_proto->Clone(command_obj);
 }

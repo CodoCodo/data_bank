@@ -8,28 +8,25 @@
 #include <map>
 #include "label_core_command.h"
 #include "common/t_common.h"
+#include "util/t_util.h"
 
 class SetCmd : public LabelCoreCommand {
-  std::string cmd_str_;
+  CommandObject cmd_obj_;
 
-  std::string key_;
   std::string var_name_;
   std::string var_value_;
 
-  void ParseCmd(const std::string & cmd_str) {
-    if (cmd_str.empty()) {
+  void ParseCmd(const CommandObject & cmd_obj) {
+    if (cmd_obj.Empty()) {
       return ;
     }
-    std::istringstream iss(cmd_str);
-    iss >> key_ >> var_name_;
-
-    // work here
+    TUtil::SplitKeyValue(cmd_obj.value, &var_name_, &var_value_);
   }
 
  public:
-  SetCmd(const std::string & cmd_str = "")
-    : cmd_str_(cmd_str) {
-    ParseCmd(cmd_str);
+  SetCmd(const CommandObject & cmd_obj = CommandObject())
+    : cmd_obj_(cmd_obj) {
+    ParseCmd(cmd_obj);
   }
 
   virtual std::string Key() override {
@@ -38,7 +35,7 @@ class SetCmd : public LabelCoreCommand {
 
   virtual void Execute(std::shared_ptr<LabelCoreContext> p_context) override {
     if (var_name_.empty()) {
-      T_COMMON_CERR << "invalid command " << cmd_str_ << std::endl;
+      T_COMMON_CERR << "invalid command " << cmd_obj_ << std::endl;
       return ;
     }
     auto & configs = p_context->configs_;
@@ -50,8 +47,8 @@ class SetCmd : public LabelCoreCommand {
     }
   }
 
-  virtual std::shared_ptr<LabelCoreCommand> Clone(const std::string & cmd_str) override {
-    return std::make_shared<SetCmd>(cmd_str);
+  virtual std::shared_ptr<LabelCoreCommand> Clone(const CommandObject & cmd_obj) override {
+    return std::make_shared<SetCmd>(cmd_obj);
   }
 };
 #endif //_SET_CMD_HPP

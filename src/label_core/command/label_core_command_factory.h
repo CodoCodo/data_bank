@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <memory>
+#include "common/command_object.h"
 
 class LabelCoreCommandFactory {
   // 命令原型存储表
@@ -11,7 +12,7 @@ class LabelCoreCommandFactory {
   std::string GetKeyFromCommandStr(const std::string & cmd_str);
  public:
   LabelCoreCommandFactory();
-  std::shared_ptr<LabelCoreCommand> Create(const std::string & cmd_str);
+  std::shared_ptr<LabelCoreCommand> Create(const CommandObject & command_obj);
 };
 
 #endif //_LABEL_CORE_COMMAND_FACTORY_H

@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include "label_core_context.h"
+#include "common/command_object.h"
 
 class LabelCoreCommand {
  public:
@@ -11,7 +12,7 @@ class LabelCoreCommand {
   virtual std::string Key() = 0;
   virtual std::string Usage() {}
   virtual void Execute(std::shared_ptr<LabelCoreContext> p_context) = 0;
-  virtual std::shared_ptr<LabelCoreCommand> Clone(const std::string & cmd_str) = 0;
+  virtual std::shared_ptr<LabelCoreCommand> Clone(const CommandObject & command_obj) = 0;
 };
 
 #endif //_LABEL_CORE_COMMAND_H

@@ -30,7 +30,7 @@ echo "" >> ${header_file}
 echo "  virtual void Execute(std::shared_ptr<LabelCoreContext> p_context) override {" >> ${header_file}
 echo "  }" >> ${header_file}
 echo "" >> ${header_file}
-echo "  virtual std::shared_ptr<LabelCoreCommand> Clone(const std::string & cmd_str) override {" >> ${header_file}
+echo "  virtual std::shared_ptr<LabelCoreCommand> Clone(const CommandObject & cmd_str) override {" >> ${header_file}
 echo "    return std::make_shared<${class_name}>(*this);" >> ${header_file}
 echo "  }" >> ${header_file}
 echo "};" >> ${header_file}

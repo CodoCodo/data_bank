@@ -15,7 +15,7 @@ class ExitCmd : public LabelCoreCommand {
     p_context->b_run_ = false;
   }
 
-  virtual std::shared_ptr<LabelCoreCommand> Clone(const std::string & cmd_str) override {
+  virtual std::shared_ptr<LabelCoreCommand> Clone(const CommandObject & cmd_str) override {
     return std::make_shared<ExitCmd>(*this);
   }
 };

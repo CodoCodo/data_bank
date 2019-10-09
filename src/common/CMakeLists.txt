@@ -1,3 +1,3 @@
 AUX_SOURCE_DIRECTORY(. COMMON_SRC)
 ADD_LIBRARY(label_core_common ${COMMON_SRC})
-
+TARGET_LINK_LIBRARIES(label_core_common t_util)

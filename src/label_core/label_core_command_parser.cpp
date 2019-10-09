@@ -5,6 +5,6 @@ std::shared_ptr<LabelCoreCommand> LabelCoreCommandParser::ExtractCommand() {
   return p_cmd;
 }
 
-void LabelCoreCommandParser::PushCommandStr(const std::string & cmd_str, char * p_addition_buf) {
-  cmd_queue_.Push(command_factory_.Create(cmd_str));
+void LabelCoreCommandParser::PushCommandStr(const CommandObject & command_obj) {
+  cmd_queue_.Push(command_factory_.Create(command_obj));
 }

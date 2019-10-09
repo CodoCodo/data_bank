@@ -65,8 +65,11 @@ int LabelMain(int argc, char *argv[]) {
     std::string cmd_line;
     std::getline(std::cin, cmd_line);
 
+    CommandObject cmd_obj;
+    cmd_obj.Parse(cmd_line);
+
     // 推送命令
-    p_command_parser->PushCommandStr(cmd_line);
+    p_command_parser->PushCommandStr(cmd_obj);
     p_core->RunOnce();
   }
 

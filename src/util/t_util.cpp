@@ -47,4 +47,22 @@ namespace TUtil {
     }
     return result;
   }
+
+  void SplitKeyValue(const std::string & str, std::string * p_key, std::string * p_value) {
+    if (p_key == nullptr && p_value == nullptr) {
+      return;
+    }
+    auto space_pos = str.find_first_of(' ');
+
+    if (p_key != nullptr) {
+      *p_key = str.substr(0, space_pos);
+    }
+    if (p_value != nullptr) {
+      if (space_pos < str.size()) {
+        *p_value = str.substr(space_pos + 1);
+      } else {
+        *p_value = "";
+      }
+    }
+  }
 }
