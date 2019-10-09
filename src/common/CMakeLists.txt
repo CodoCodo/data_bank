@@ -1,0 +1,3 @@
+AUX_SOURCE_DIRECTORY(. COMMON_SRC)
+ADD_LIBRARY(label_core_common ${COMMON_SRC})
+
