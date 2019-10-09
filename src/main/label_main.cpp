@@ -12,6 +12,7 @@
 #include "opencv2/highgui/highgui.hpp"
 
 #include "util/queue_ts.hpp"
+#include "io/terminal_io/terminal_io.h"
 
 class MouseEvent {
   friend std::ostream & operator<<(std::ostream &os, const MouseEvent & obj);
@@ -43,6 +44,9 @@ int LabelMain(int argc, char *argv[]) {
   std::shared_ptr<LabelCoreCommandParser> p_command_parser(new LabelCoreCommandParser);
   std::shared_ptr<LabelCore> p_core(new LabelCore(p_context, p_command_parser));
   QueueTs<MouseEvent> mouse_event_queue;
+
+  std::shared_ptr< QueueTs<CommandObject> > p_terminal_cmd_queue = std::make_shared< QueueTs<CommandObject> >();
+  TerminalIo terminal_io(p_terminal_cmd_queue);
   
   cv::Mat output_img;
   cv::namedWindow(process_name);
@@ -52,7 +56,9 @@ int LabelMain(int argc, char *argv[]) {
      
     // 按键事件
     auto key = cv::waitKey(frame_interval);
-    std::cout << "tdj_debug " << (int)key << std::endl;
+    if (key > 0) {
+      std::cout << "tdj_debug " << (int)key << std::endl;
+    }
 
     // 处理鼠标事件
     MouseEvent mouse_event;
@@ -61,16 +67,14 @@ int LabelMain(int argc, char *argv[]) {
         mouse_event_queue.TryPop(mouse_event);
     }
 
-    // 命令行直接输入
-    std::string cmd_line;
-    std::getline(std::cin, cmd_line);
-
-    CommandObject cmd_obj;
-    cmd_obj.Parse(cmd_line);
-
-    // 推送命令
-    p_command_parser->PushCommandStr(cmd_obj);
-    p_core->RunOnce();
+    for (int i = p_terminal_cmd_queue->Size();
+         i > 0; --i) {
+      CommandObject cmd_obj;
+      p_terminal_cmd_queue->TryPop(cmd_obj);
+      // 推送命令
+      p_command_parser->PushCommandStr(cmd_obj);
+      p_core->RunOnce();
+    }
   }
 
   cv::destroyWindow(process_name);
