@@ -48,10 +48,13 @@ int LabelMain(int argc, char *argv[]) {
   std::shared_ptr< QueueTs<CommandObject> > p_terminal_cmd_queue = std::make_shared< QueueTs<CommandObject> >();
   TerminalIo terminal_io(p_terminal_cmd_queue);
   
-  cv::Mat output_img;
   cv::namedWindow(process_name);
   cv::setMouseCallback(process_name, OnMouse, &mouse_event_queue); //调用回调函数
+
   while(p_context->b_run_) {
+    p_command_parser->PushCommandStr(CommandObject("update_output"));
+    p_core->RunOnce();
+
     cv::imshow(process_name, p_context->output_img_);
      
     // 按键事件
