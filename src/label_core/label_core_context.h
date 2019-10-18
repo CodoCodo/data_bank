@@ -33,6 +33,15 @@ class LabelCoreContext{
   bool b_run_;
   cv::Mat default_background_;
   cv::Mat output_img_;
+
+  void Start();
+  int GetMediaCount();
+  // 返回实际跳转的媒体数目
+  int MediaJump(int index_delta);
+  // 帧跳转，返回实际跳转的帧数目
+  int FrameJump(int index_delta);
+
+  void ResetImageProvider(const MediaInfo & media_info);
 };
 
 #endif //_LABEL_CORE_CONTEXT_H

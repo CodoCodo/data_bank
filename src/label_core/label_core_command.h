@@ -10,7 +10,7 @@ class LabelCoreCommand {
  public:
   virtual ~LabelCoreCommand() = default;
   virtual std::string Key() = 0;
-  virtual std::string Usage() {}
+  virtual std::string Usage() {return Key() + " usage : ";}
   virtual void Execute(std::shared_ptr<LabelCoreContext> p_context) = 0;
   virtual std::shared_ptr<LabelCoreCommand> Clone(const CommandObject & command_obj) = 0;
 };
