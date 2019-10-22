@@ -8,6 +8,8 @@
 #include "show_cmd.hpp"
 #include "start_cmd.hpp"
 #include "update_output_cmd.hpp"
+#include "media_jump.hpp"
+#include "frame_jump.hpp"
 
 LabelCoreCommandFactory::LabelCoreCommandFactory() {
   auto AddProto = [&](LabelCoreCommand * p_command) {
@@ -21,6 +23,8 @@ LabelCoreCommandFactory::LabelCoreCommandFactory() {
   AddProto(new SetCmd());
   AddProto(new ShowCmd());
   AddProto(new StartCmd());
+  AddProto(new MediaJump());
+  AddProto(new FrameJump());
   AddProto(new UpdateOutputCmd());
 }
 

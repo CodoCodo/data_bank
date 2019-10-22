@@ -13,11 +13,7 @@ class UpdateOutputCmd : public LabelCoreCommand {
   }
 
   virtual void Execute(std::shared_ptr<LabelCoreContext> p_context) override {
-    if (p_context->state_ == LabelCoreContext::IDLE) {
-      p_context->default_background_.copyTo(p_context->output_img_);
-    } else {
-      p_context->raw_img_.copyTo(p_context->output_img_);
-    }
+    p_context->Render();
   }
 
   virtual std::shared_ptr<LabelCoreCommand> Clone(const CommandObject & cmd_obj) override {

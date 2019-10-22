@@ -1,42 +1,41 @@
 
-#ifndef _MEDIA_JUMP_HPP
-#define _MEDIA_JUMP_HPP
+#ifndef _FRAME_JUMP_HPP
+#define _FRAME_JUMP_HPP
 
 #include <string>
 #include <memory>
 #include "label_core_command.h"
 #include "common/t_common.h"
 
-class MediaJump : public LabelCoreCommand {
-  CommandObject cmd_obj_;
-
+class FrameJump : public LabelCoreCommand {
   int delta_index_;
+
   void ParseCmd(const CommandObject & cmd_obj) {
     delta_index_ = 0;
     std::istringstream iss(cmd_obj.value);
     iss >> delta_index_;
   }
  public:
-  MediaJump(const CommandObject & cmd_obj = CommandObject())
-    : cmd_obj_(cmd_obj),
-      delta_index_(0) {
-    ParseCmd(cmd_obj_);
+  FrameJump(const CommandObject & cmd_obj = CommandObject())
+    : delta_index_(0) {
+    ParseCmd(cmd_obj);
   }
 
   virtual std::string Key() override {
-    return "media_jump";
+    return "frame_jump";
   }
 
   virtual std::string Usage() override {
-    return "media_jump delta_index";
+    return "frame_jump delta_index";
   }
 
   virtual void Execute(std::shared_ptr<LabelCoreContext> p_context) override {
-    p_context->MediaJump(delta_index_);
+    auto res = p_context->FrameJump(delta_index_);
+    T_COMMON_COUT << res << '\t' << p_context->frame_index_ << '\t' << p_context->p_image_provider_->Count() << std::endl;
   }
 
   virtual std::shared_ptr<LabelCoreCommand> Clone(const CommandObject & cmd_obj) override {
-    return std::make_shared<MediaJump>(cmd_obj);
+    return std::make_shared<FrameJump>(cmd_obj);
   }
 };
-#endif //_MEDIA_JUMP_HPP
+#endif //_FRAME_JUMP_HPP

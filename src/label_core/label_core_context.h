@@ -42,6 +42,9 @@ class LabelCoreContext{
   int FrameJump(int index_delta);
 
   void ResetImageProvider(const MediaInfo & media_info);
+
+  // 渲染
+  void Render();
 };
 
 #endif //_LABEL_CORE_CONTEXT_H
