@@ -81,6 +81,10 @@ void LabelCoreContext::Start() {
   // work here 其他初始化
 }
 
+void LabelCoreContext::Stop() {
+  state_ = IDLE;
+}
+
 void LabelCoreContext::Render() {
   if (state_ == LabelCoreContext::IDLE) {
     default_background_.copyTo(output_img_);

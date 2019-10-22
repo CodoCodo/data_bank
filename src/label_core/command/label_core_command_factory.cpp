@@ -7,6 +7,8 @@
 #include "set_cmd.hpp"
 #include "show_cmd.hpp"
 #include "start_cmd.hpp"
+#include "stop_cmd.hpp"
+#include "start_stop.hpp"
 #include "update_output_cmd.hpp"
 #include "media_jump.hpp"
 #include "frame_jump.hpp"
@@ -23,6 +25,8 @@ LabelCoreCommandFactory::LabelCoreCommandFactory() {
   AddProto(new SetCmd());
   AddProto(new ShowCmd());
   AddProto(new StartCmd());
+  AddProto(new StopCmd());
+  AddProto(new StartStop());
   AddProto(new MediaJump());
   AddProto(new FrameJump());
   AddProto(new UpdateOutputCmd());

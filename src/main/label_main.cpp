@@ -13,6 +13,7 @@
 
 #include "util/queue_ts.hpp"
 #include "io/terminal_io/terminal_io.h"
+#include "io/key_io/label_core_key_io.h"
 
 class MouseEvent {
   friend std::ostream & operator<<(std::ostream &os, const MouseEvent & obj);
@@ -47,6 +48,7 @@ int LabelMain(int argc, char *argv[]) {
 
   std::shared_ptr< QueueTs<CommandObject> > p_terminal_cmd_queue = std::make_shared< QueueTs<CommandObject> >();
   TerminalIo terminal_io(p_terminal_cmd_queue);
+  std::shared_ptr<LabelCoreKeyIo> p_label_core_key_io = LabelCoreKeyIo::Create();
   
   cv::namedWindow(process_name);
   cv::setMouseCallback(process_name, OnMouse, &mouse_event_queue); //调用回调函数
@@ -61,6 +63,9 @@ int LabelMain(int argc, char *argv[]) {
     auto key = cv::waitKey(frame_interval);
     if (key > 0) {
       std::cout << "tdj_debug " << (int)key << std::endl;
+      auto && cmd_obj = p_label_core_key_io->ParseKey(key);
+      p_command_parser->PushCommandStr(cmd_obj);
+      p_core->RunOnce();
     }
 
     // 处理鼠标事件

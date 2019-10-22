@@ -6,7 +6,7 @@
 #include "media_access/media_access.h"
 #include "image_provider/image_provider.h"
 
-class LabelCoreContext{
+class LabelCoreContext {
  public:
   LabelCoreContext();
 
@@ -35,6 +35,7 @@ class LabelCoreContext{
   cv::Mat output_img_;
 
   void Start();
+  void Stop();
   int GetMediaCount();
   // 返回实际跳转的媒体数目
   int MediaJump(int index_delta);

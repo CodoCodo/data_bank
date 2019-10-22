@@ -1,0 +1,3 @@
+AUX_SOURCE_DIRECTORY(. LABEL_CORE_KEY_IO_SRC)
+ADD_LIBRARY(label_core_key_io ${LABEL_CORE_KEY_IO_SRC})
+TARGET_LINK_LIBRARIES(label_core_key_io t_util pthread)
