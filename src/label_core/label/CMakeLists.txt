@@ -1,0 +1,4 @@
+AUX_SOURCE_DIRECTORY(. LABEL_CORE_LABEL_SRC)
+ADD_LIBRARY(label_core_label ${LABEL_CORE_LABEL_SRC})
+TARGET_LINK_LIBRARIES(label_core_label label_core_render)
+
