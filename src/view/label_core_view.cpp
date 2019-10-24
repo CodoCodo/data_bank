@@ -11,6 +11,7 @@
 
 #include "mouse_event.h"
 #include "mouse_event_listener.h"
+#include "render/rect_drawable.h"
 #include "common/t_common.h"
 
 class LabelCoreViewImpl : public LabelCoreView {
@@ -27,6 +28,10 @@ class LabelCoreViewImpl : public LabelCoreView {
 
   bool valid_select_region_;
   cv::Rect select_region_;
+
+  StylePanel high_light_style_;
+  RectDrawable rect_drawable_;
+
   cv::Rect GetSelectRegion(cv::Point & p1, cv::Point & p2) {
     cv::Rect tmp;
     tmp.x = std::min(p1.x, p2.x);
@@ -63,7 +68,7 @@ class LabelCoreViewImpl : public LabelCoreView {
       p_core_->RunOnce();
 
       if (valid_select_region_) {
-        cv::rectangle(p_context_->output_img_, select_region_, cv::Scalar(255, 0, 255));
+        rect_drawable_.Draw(p_context_->output_img_, high_light_style_);
       }
       cv::imshow(process_name_, p_context_->output_img_);
       
@@ -85,6 +90,7 @@ class LabelCoreViewImpl : public LabelCoreView {
         if (p_mouse_listener->state_ == MouseEventListener::LBUTTON_DOWN) {
           valid_select_region_ = true;
           select_region_ = GetSelectRegion(p_mouse_listener->pt_lbutton_down_, p_mouse_listener->pt_);
+          rect_drawable_.Update(select_region_);
         } else {
           valid_select_region_ = false;
         }

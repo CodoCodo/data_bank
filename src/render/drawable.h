@@ -6,7 +6,7 @@
 
 class Drawable {
  public:
-  virtual void Draw(cv::Mat & canvas, const StylePanel & style_panel) = 0;
+  virtual void Draw(cv::Mat & canvas, StylePanel & style_panel) = 0;
 };
 
 #endif //_DRAWABLE_H
