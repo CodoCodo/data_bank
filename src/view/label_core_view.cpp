@@ -9,23 +9,9 @@
 #include "io/terminal_io/terminal_io.h"
 #include "io/key_io/label_core_key_io.h"
 
-class MouseEvent {
-  friend std::ostream & operator<<(std::ostream &os, const MouseEvent & obj);
- public:
-  MouseEvent(int event = 0, int x = 0, int y = 0)
-    : event_(event),
-      x_(x),
-      y_(y) {
-  }
-  int event_;
-  int x_;
-  int y_;
-};
-
-std::ostream & operator<<(std::ostream &os, const MouseEvent & obj) {
-  os << obj.event_ << "\t(" << obj.x_ << " , " << obj.y_ << ")";
-  return os;
-}
+#include "mouse_event.h"
+#include "mouse_event_listener.h"
+#include "common/t_common.h"
 
 class LabelCoreViewImpl : public LabelCoreView {
   const std::string process_name_ = "label";
@@ -37,6 +23,17 @@ class LabelCoreViewImpl : public LabelCoreView {
   static void OnMouse(int event, int x, int y, int flags, void *user_data) {
     QueueTs<MouseEvent> *p_queue = (QueueTs<MouseEvent> *)user_data;
     p_queue->Push(MouseEvent(event, x, y));
+  }
+
+  bool valid_select_region_;
+  cv::Rect select_region_;
+  cv::Rect GetSelectRegion(cv::Point & p1, cv::Point & p2) {
+    cv::Rect tmp;
+    tmp.x = std::min(p1.x, p2.x);
+    tmp.y = std::min(p1.y, p2.y);
+    tmp.width = std::abs(p1.x - p2.x);
+    tmp.height = std::abs(p1.y - p2.y);
+    return tmp;
   }
  public:
   LabelCoreViewImpl(std::shared_ptr<LabelCoreContext> p_context,
@@ -55,13 +52,19 @@ class LabelCoreViewImpl : public LabelCoreView {
     std::shared_ptr< QueueTs<CommandObject> > p_terminal_cmd_queue = std::make_shared< QueueTs<CommandObject> >();
     TerminalIo terminal_io(p_terminal_cmd_queue);
     std::shared_ptr<LabelCoreKeyIo> p_label_core_key_io = LabelCoreKeyIo::Create();
+    std::shared_ptr<MouseEventListener> p_mouse_listener = std::make_shared<MouseEventListener>();
     
     cv::namedWindow(process_name_);
     cv::setMouseCallback(process_name_, OnMouse, &mouse_event_queue); //调用回调函数
+
+    valid_select_region_ = false;
     while(p_context_->b_run_) {
       p_command_parser_->PushCommandStr(CommandObject("update_output"));
       p_core_->RunOnce();
 
+      if (valid_select_region_) {
+        cv::rectangle(p_context_->output_img_, select_region_, cv::Scalar(255, 0, 255));
+      }
       cv::imshow(process_name_, p_context_->output_img_);
       
       // 按键事件
@@ -78,6 +81,13 @@ class LabelCoreViewImpl : public LabelCoreView {
       for (int mouse_event_count = mouse_event_queue.Size();
           mouse_event_count > 0; --mouse_event_count) {
           mouse_event_queue.TryPop(mouse_event);
+        auto input_state = p_mouse_listener->OnEvent(mouse_event);
+        if (p_mouse_listener->state_ == MouseEventListener::LBUTTON_DOWN) {
+          valid_select_region_ = true;
+          select_region_ = GetSelectRegion(p_mouse_listener->pt_lbutton_down_, p_mouse_listener->pt_);
+        } else {
+          valid_select_region_ = false;
+        }
       }
 
       for (int i = p_terminal_cmd_queue->Size();
