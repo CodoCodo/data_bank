@@ -92,3 +92,22 @@ void LabelCoreContext::Render() {
     raw_img_.copyTo(output_img_);
   }
 }
+
+// LabelManagerInterface接口实现
+std::string LabelCoreContext::GetLabelStr() {
+  auto iter = configs_.find("current_label_str");
+  if (iter == configs_.end()) {
+    T_COMMON_CERR << "current_label_str not set yet" << std::endl;
+    return "";
+  }
+  return iter->second;
+}
+
+int LabelCoreContext::GetMediaId() {
+  MediaInfo && media_info = p_media_access_->Get(media_index_);
+  return media_info.id_;
+}
+
+int LabelCoreContext::GetFrameId() {
+  return frame_index_;
+}

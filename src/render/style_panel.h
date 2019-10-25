@@ -8,6 +8,7 @@ class StylePanel {
  public:
   virtual cv::Scalar FrontColor();
   virtual cv::Scalar BackgroundColor();
+  virtual int Thickness();
 };
 
 #endif //_STYLE_PANEL_H

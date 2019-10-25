@@ -4,10 +4,20 @@
 #include "render/drawable.h"
 #include <string>
 #include <memory>
-#include "label_manager/label_info.h"
 
 class LabelObject : public Drawable {
  public:
+  typedef enum {
+    Nothing,
+    Point,
+    Elipse,
+    Circle,
+    Rectangle,
+    Square,
+    FullScreen,
+    LabelTypeCount
+  } LabelType;
+
   virtual ~LabelObject() = default;
 
   virtual void SetLabelStr(const std::string & label_str);
@@ -16,7 +26,7 @@ class LabelObject : public Drawable {
   virtual void SetRegion(const cv::Rect &region);
   virtual cv::Rect GetRegion() const;
 
-  static std::shared_ptr<LabelObject> Create(const LabelType & type, cv::Point & pt_start, cv::Point & pt_end);
+  static std::shared_ptr<LabelObject> Create(const LabelType & type);
 
  protected:
   LabelObject(const LabelType & type);

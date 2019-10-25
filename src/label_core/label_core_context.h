@@ -5,8 +5,10 @@
 #include "mysql_dao/mysql_dao.h"
 #include "media_access/media_access.h"
 #include "image_provider/image_provider.h"
+#include "label_core/label_object.h"
+#include "label_manager/label_manager.h"
 
-class LabelCoreContext {
+class LabelCoreContext : public LabelManagerInterface {
  public:
   LabelCoreContext();
 
@@ -46,6 +48,11 @@ class LabelCoreContext {
 
   // 渲染
   void Render();
+
+  // LabelManagerInterface接口实现
+  virtual std::string GetLabelStr() override;
+  virtual int GetMediaId() override;
+  virtual int GetFrameId() override;
 };
 
 #endif //_LABEL_CORE_CONTEXT_H

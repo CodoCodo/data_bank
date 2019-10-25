@@ -7,3 +7,7 @@ cv::Scalar StylePanel::FrontColor() {
 cv::Scalar StylePanel::BackgroundColor() {
   return cv::Scalar(125, 0, 125);
 }
+
+int StylePanel::Thickness() {
+  return 1;
+}

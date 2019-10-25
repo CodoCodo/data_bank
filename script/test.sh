@@ -1,13 +1,5 @@
 #!/bin/bash
 
-file_path=$1
+${data_base_cmd} < ${sql_script_path}/create_table_simple_label.sql
 
-media_info=$(python3 ${python_path}/media_info.py ${file_path})
-echo "${media_info}"
-
-media_type=$(echo "$media_info" | awk '{print $1}')
-
-if [[ "${media_type}" == "bmp" ]]; then
-  echo "not_supported media ${file_path}"
-  exit
-fi
+"INSERT INTO simple_labels (media_id, frame_id, label_str) VALUES (1, 0, 'face');"
