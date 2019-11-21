@@ -1,19 +1,32 @@
 #include "label_core.h"
+#include "label_core_context.h"
+#include "media_manager.h"
+#include "label_manager.h"
 
-LabelCore::LabelCore(std::shared_ptr<LabelCoreContext> p_context,
-                     std::shared_ptr<LabelCoreCommandParser> p_command_parser)
-  : p_context_(p_context),
-    p_command_parser_(p_command_parser) {
-}
-
-void LabelCore::Run() {
-  while (p_context_->b_run_) {
-    auto p_cmd = p_command_parser_->ExtractCommand();
-    p_cmd->Execute(p_context_);
+class LabelCoreImpl : public LabelCore {
+  std::shared_ptr< QueueTs<LabelCoreCommand> > p_cmd_queue_;
+  std::shared_ptr<MediaManager> p_media_manager_;
+  std::shared_ptr<LabelManager> p_label_manager_;
+ public:
+  LabelCoreImpl(std::shared_ptr< QueueTs<LabelCoreCommand> > p_cmd_queue) {
+    : p_cmd_queue_(p_cmd_queue),
+      p_label_core_context_(std::make_shared<LabelCoreContext>())
+      p_media_manager_(MediaManager::Create(p_label_core_context_)),
+      p_label_manager_(LabelManager::Create(p_label_core_context_)) {
   }
-}
 
-void LabelCore::RunOnce() {
-  auto p_cmd = p_command_parser_->ExtractCommand();
-  p_cmd->Execute(p_context_);
+  void Execute(const LabelCoreCommand & cmd) {
+    // todo: handle commands here
+  }
+
+  virtual void RunOnce() override {
+    LabelCoreCommand cmd;
+    if (p_cmd_queue_->TryPop(cmd)) {
+      Execute(cmd);
+    }
+  }
+};
+ 
+std::shared_ptr<LabelCore> LabelCore::Create(std::shared_ptr< QueueTs<LabelCoreCommand> > p_cmd_queue) {
+  return std::make_shared<LabelCoreImpl>(std::shared_ptr< QueueTs<LabelCoreCommand> > p_cmd_queue);
 }

@@ -2,20 +2,15 @@
 #define _LABEL_CORE_H
 
 #include <memory>
+#include "util/queue_ts.hpp"
 #include "label_core_context.h"
 #include "label_core_command.h"
 #include "label_core_command_parser.h"
 
 class LabelCore {
-  std::shared_ptr<LabelCoreContext> p_context_;
-  std::shared_ptr<LabelCoreCommandParser> p_command_parser_;
  public:
-  LabelCore(std::shared_ptr<LabelCoreContext> p_context,
-            std::shared_ptr<LabelCoreCommandParser> p_command_parser);
-            
-  void Run();
-
-  void RunOnce();
+  virtual void RunOnce() = 0;
+  static std::shared_ptr<LabelCore> Create(std::shared_ptr< QueueTs<LabelCoreCommand> > p_cmd_queue);
 };
 
 #endif //_LABEL_CORE_H

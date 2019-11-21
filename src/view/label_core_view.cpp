@@ -51,6 +51,56 @@ class LabelCoreViewImpl : public LabelCoreView {
       p_core_(p_core) {
   }
 
+  void Render() {
+    // 处理媒体图像层
+    p_command_parser_->PushCommandStr(CommandObject("update_output"));
+    p_core_->RunOnce();
+
+    // 处理标注层
+    // 处理操作层
+
+
+    if (valid_select_region_) {
+      rect_drawable_.Draw(p_context_->output_img_, high_light_style_);
+    }
+    cv::imshow(process_name_, p_context_->output_img_);
+  }
+
+  void HandleInput() {
+    // // 按键事件
+    // auto key = cv::waitKey(frame_interval_);
+    // if (key > 0) {
+    //   std::cout << "tdj_debug " << (int)key << std::endl;
+    //   auto && cmd_obj = p_label_core_key_io->ParseKey(key);
+    //   p_command_parser_->PushCommandStr(cmd_obj);
+    //   p_core_->RunOnce();
+    // }
+
+    // // 处理鼠标事件
+    // MouseEvent mouse_event;
+    // for (int mouse_event_count = mouse_event_queue.Size();
+    //     mouse_event_count > 0; --mouse_event_count) {
+    //     mouse_event_queue.TryPop(mouse_event);
+    //   auto input_state = p_mouse_listener->OnEvent(mouse_event);
+    //   if (p_mouse_listener->state_ == MouseEventListener::LBUTTON_DOWN) {
+    //     valid_select_region_ = true;
+    //     select_region_ = GetSelectRegion(p_mouse_listener->pt_lbutton_down_, p_mouse_listener->pt_);
+    //     rect_drawable_.Update(select_region_);
+    //   } else {
+    //     valid_select_region_ = false;
+    //   }
+    // }
+
+    // for (int i = p_terminal_cmd_queue->Size();
+    //     i > 0; --i) {
+    //   CommandObject cmd_obj;
+    //   p_terminal_cmd_queue->TryPop(cmd_obj);
+    //   // 推送命令
+    //   p_command_parser_->PushCommandStr(cmd_obj);
+    //   p_core_->RunOnce();
+    // }
+  }
+
   virtual void Run() override {
     QueueTs<MouseEvent> mouse_event_queue;
 
@@ -62,48 +112,12 @@ class LabelCoreViewImpl : public LabelCoreView {
     cv::namedWindow(process_name_);
     cv::setMouseCallback(process_name_, OnMouse, &mouse_event_queue); //调用回调函数
 
-    valid_select_region_ = false;
     while(p_context_->b_run_) {
-      p_command_parser_->PushCommandStr(CommandObject("update_output"));
-      p_core_->RunOnce();
-
-      if (valid_select_region_) {
-        rect_drawable_.Draw(p_context_->output_img_, high_light_style_);
-      }
-      cv::imshow(process_name_, p_context_->output_img_);
+      // 渲染输出
+      Render();
       
-      // 按键事件
-      auto key = cv::waitKey(frame_interval_);
-      if (key > 0) {
-        std::cout << "tdj_debug " << (int)key << std::endl;
-        auto && cmd_obj = p_label_core_key_io->ParseKey(key);
-        p_command_parser_->PushCommandStr(cmd_obj);
-        p_core_->RunOnce();
-      }
-
-      // 处理鼠标事件
-      MouseEvent mouse_event;
-      for (int mouse_event_count = mouse_event_queue.Size();
-          mouse_event_count > 0; --mouse_event_count) {
-          mouse_event_queue.TryPop(mouse_event);
-        auto input_state = p_mouse_listener->OnEvent(mouse_event);
-        if (p_mouse_listener->state_ == MouseEventListener::LBUTTON_DOWN) {
-          valid_select_region_ = true;
-          select_region_ = GetSelectRegion(p_mouse_listener->pt_lbutton_down_, p_mouse_listener->pt_);
-          rect_drawable_.Update(select_region_);
-        } else {
-          valid_select_region_ = false;
-        }
-      }
-
-      for (int i = p_terminal_cmd_queue->Size();
-          i > 0; --i) {
-        CommandObject cmd_obj;
-        p_terminal_cmd_queue->TryPop(cmd_obj);
-        // 推送命令
-        p_command_parser_->PushCommandStr(cmd_obj);
-        p_core_->RunOnce();
-      }
+      // 处理输入
+      HandleInput();
     }
 
     cv::destroyWindow(process_name_);
